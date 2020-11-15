@@ -28,7 +28,7 @@ def home():
 
 @app.route("/recipes", methods=["GET"])
 def recipes_all():
-    return jsonify(recipes)
+    return jsonify(sorted(recipes, key=lambda r: r["id"]))
 
 
 @app.route("/recipe/<int:id>", methods=["GET"])
