@@ -1,6 +1,6 @@
 import flask
 import json
-from flask import request, jsonify
+from flask import request, Response, jsonify
 
 app = flask.Flask(__name__)
 app.config["DEBUG"]
@@ -35,9 +35,9 @@ def recipes_all():
 def recipe_single(id):
     for recipe in recipes:
         if recipe["id"] == id:
-            return recipe
+            return Response(json.dumps(recipe), status=200)
 
-    return "No Recipe found with id of {}".format(id)
+    return Response("No Recipe found with id of {}".format(id), status=404)
 
 
 @app.route("/recipe", methods=["POST"])
@@ -53,7 +53,17 @@ def recipe_add():
     }
     recipes.append(new_recipe)
 
-    return new_recipe
+    return Response(json.dumps(new_recipe), status=201, mimetype='application/json')
+
+
+@app.route("/recipe/<int:id>", methods=["DELETE"])
+def recipe_remove(id):
+    for recipe in recipes:
+        if recipe["id"] == id:
+            recipes.remove(recipe)
+            return Response("Recipe with id of `{}` has been removed".format(id), status=200)
+
+    return Response("No Recipe found with id of {}".format(id), status=404)
 
 
 app.run()
