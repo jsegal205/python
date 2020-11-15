@@ -42,6 +42,7 @@ def recipe_single(id):
 
 @app.route("/recipe", methods=["POST"])
 def recipe_add():
+    # TODO: add auth
     body = json.loads(str(request.data, encoding='utf-8'))
 
     next_id = len(recipes) + 1
@@ -58,6 +59,7 @@ def recipe_add():
 
 @app.route("/recipe/<int:id>", methods=["DELETE"])
 def recipe_remove(id):
+    # TODO: add auth, combine with PUT method
     for recipe in recipes:
         if recipe["id"] == id:
             recipes.remove(recipe)
@@ -68,10 +70,12 @@ def recipe_remove(id):
 
 @app.route("/recipe/<int:id>", methods=["PUT"])
 def recipe_update(id):
+    # TODO: add auth, combine with DELETE method
     for recipe in recipes:
         if recipe["id"] == id:
             body = json.loads(str(request.data, encoding='utf-8'))
 
+            # TODO: fallback to recipe prop if not passed in body
             updated_recipe = {
                 "id": recipe["id"],
                 "title": body["title"],
