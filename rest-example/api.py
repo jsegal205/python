@@ -1,4 +1,5 @@
 import flask
+import json
 from flask import request, jsonify
 
 app = flask.Flask(__name__)
@@ -37,6 +38,22 @@ def recipe_single(id):
             return recipe
 
     return "No Recipe found with id of {}".format(id)
+
+
+@app.route("/recipe", methods=["POST"])
+def recipe_add():
+    body = json.loads(str(request.data, encoding='utf-8'))
+
+    next_id = len(recipes) + 1
+    new_recipe = {
+        "id": next_id,
+        "title": body["title"],
+        "ingredients": body["ingredients"],
+        "directions": body["directions"]
+    }
+    recipes.append(new_recipe)
+
+    return new_recipe
 
 
 app.run()
