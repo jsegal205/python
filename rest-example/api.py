@@ -66,4 +66,24 @@ def recipe_remove(id):
     return Response("No Recipe found with id of {}".format(id), status=404)
 
 
+@app.route("/recipe/<int:id>", methods=["PUT"])
+def recipe_update(id):
+    for recipe in recipes:
+        if recipe["id"] == id:
+            body = json.loads(str(request.data, encoding='utf-8'))
+
+            updated_recipe = {
+                "id": recipe["id"],
+                "title": body["title"],
+                "ingredients": body["ingredients"],
+                "directions": body["directions"]
+            }
+
+            recipes.remove(recipe)
+            recipes.append(updated_recipe)
+            return Response(json.dumps(updated_recipe), status=200, mimetype='application/json')
+
+    return Response("No Recipe found with id of {}".format(id), status=404)
+
+
 app.run()

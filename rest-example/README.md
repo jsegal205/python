@@ -21,3 +21,12 @@
   }
   ```
 - DELETE /recipe/:id
+- PUT /recipe/:id
+  - sample request body
+  ```json
+  {
+    "title": "moar ham",
+    "ingredients": "hammier ham",
+    "directions": "just eat"
+  }
+  ```
