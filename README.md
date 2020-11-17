@@ -10,4 +10,4 @@ To dig into unit testing and command line interactions with Python
 
 To learn about a CRUD webserver with `flask`
 
-- [Rest API](./rest-example/README.md)
+- [Rest API](./rest-api/README.md)
