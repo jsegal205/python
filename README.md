@@ -1,5 +1,11 @@
 # Python Projects
 
+## Folder Sorter
+
+To play with OS commands
+
+- [File Sorter](./file-sorter/README.md)
+
 ## Palindrome
 
 To dig into unit testing and command line interactions with Python
