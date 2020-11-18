@@ -4,7 +4,7 @@
 
 To play with OS commands
 
-- [File Sorter](./file-sorter/README.md)
+- [Folder Sorter](./folder-sorter/README.md)
 
 ## Palindrome
 
