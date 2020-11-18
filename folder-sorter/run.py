@@ -1,5 +1,5 @@
 from os import listdir, mkdir
-from os.path import isfile, join, isdir, join
+from os.path import isfile, join, isdir, join, exists
 from shutil import move
 
 inpath = input("Please enter text path to be sorted: ")
@@ -35,7 +35,18 @@ if (isdir(inpath)):
         if isdir(targetpath) == False:
             mkdir(targetpath)
 
-        move(join(inpath, filename), targetpath)
+        dst_filepath = join(targetpath, filename)
+        if exists(dst_filepath):
+            i = 1
+            while True:
+                tmp_filename = fname_split[0] + "_" + str(i) + "." + ext
+                if not exists(join(targetpath, tmp_filename)):
+                    print("renaming {} to {}".format(filename, tmp_filename))
+                    dst_filepath = join(targetpath, tmp_filename)
+                    break
+                i += 1
+
+        move(join(inpath, filename), dst_filepath)
 
     if len(files) > 0:
         print("Completed sorting files!")
