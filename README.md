@@ -6,6 +6,12 @@ Script to power [games.json](https://github.com/jsegal205/jimsegal-com/blob/main
 
 - [Game Info](./gameinfo/README.md)
 
+## Image description generator
+
+use AI to help generate descriptions of images sent to it.
+
+- [Image Description Generator](./image-alt-text-generator/README.md)
+
 ## Folder Sorter
 
 To play with OS commands
