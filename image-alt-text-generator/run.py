@@ -1,42 +1,50 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
-from PIL import Image
-import io
+import base64
+import mimetypes
 import tkinter as tk
 from tkinter import filedialog
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Initialize OpenAI client with API key from the .env file
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+# Set up the OpenAI API key from environment variable
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def get_image_alt_text(image_path):
-    # Load the image
-    with open(image_path, 'rb') as image_file:
-        image_data = image_file.read()
+def generate_description(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+        mt = mimetypes.guess_type(image_path)
+        image_url = f"data:{mt[0]};base64,{encoded_string}"
 
-    # Open the image using PIL to check its size and format (optional)
-    img = Image.open(io.BytesIO(image_data))
-    width, height = img.size
-    image_format = img.format
-
-    # Prepare the prompt for the LLM
-    prompt = f"Generate an alt text for an image with dimensions {width}x{height}, format {image_format}. \
-               The image file is described as follows:"
-
-    # Call the GPT-4 API to generate alt text
+    # Use GPT-4 to generate a description based on the image
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant that generates accurate alt text for images."},
-            {"role": "user", "content": prompt}
-        ]
-    )
+            {
+                "role": "system",
+                "content": "You are an AI that generates descriptive text for images based on their features."
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "What is this an image of?"
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": image_url
+                        }
+                    }
+                ]
+            }
+        ])
 
     # Extract and return the generated alt text
-    alt_text = response['choices'][0]['message']['content']
+    alt_text = response.choices[0].message.content
     return alt_text
 
 def select_file():
@@ -53,16 +61,15 @@ def select_file():
             ("PNG Files", "*.png"),
             ("GIF Files", "*.gif"),
             ("BMP Files", "*.bmp"),
-            ("All Files", "*.*")  # This line will allow all file types to be shown
-        ],
-        initialdir='/mnt/c/Users/jsega/Downloads/'
+            ("All Files", "*.*")
+        ]#,
+        # initialdir='/mnt/c/Users/jsega/Downloads/'
     )
     return file_path
 
-# Example usage
 image_path = select_file()
-if image_path:  # Check if a file was selected
-    alt_text = get_image_alt_text(image_path)
-    print(f"Generated Alt Text: {alt_text}")
+if image_path:
+    description = generate_description(image_path)
+    print(f"Generated Description: {description}")
 else:
     print("No file selected.")
