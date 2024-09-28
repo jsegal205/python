@@ -26,7 +26,13 @@ install any packages listed in the requirements.txt
 pip install -r requirements.txt
 ```
 
-## OpenAI api key
+## OpenAI
+
+### payment
+
+this will use a paid feature of openai, ensure that you have payment information set up on your account.
+
+### api key
 
 generate and add an openAI key to a .env file in this directory:
 
